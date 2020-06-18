@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int _leftLeverCount;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     private Lever m_lever;
     private Stand m_stand;
     private CargoPanel m_cargoPanel;
+
 
     private void OnEnable()
     {
@@ -56,6 +58,8 @@ public class GameManager : MonoBehaviour
 
         if (leftStrength == rightStrength)
         {
+            Camera.main.GetComponent<GameEvents>().Win();
+            Camera.main.GetComponent<Timer>().SetWin();
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!You win!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
     }
