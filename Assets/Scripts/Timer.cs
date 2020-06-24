@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public float startTime = 15;
+    public float startTime = 600;
     public Text timer;
     public GameObject losePanel;
     private bool isWin = false;

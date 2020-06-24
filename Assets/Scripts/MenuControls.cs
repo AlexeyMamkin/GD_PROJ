@@ -7,16 +7,22 @@ public class MenuControls : MonoBehaviour
 {
     public void LevelChoised() //normal level
     {
-        SceneManager.LoadScene("GameScene");
+        Utils.EventManager.Trigger("ClearField");
+
+        Utils.EventManager.Trigger("NormalMode");
+        Utils.EventManager.Trigger("DisableMenu");
     }
 
     public void HardLevelChoised()
     {
-        Debug.Log("--------------Hard level in development--------------");
+        Utils.EventManager.Trigger("ClearField");
+
+        Utils.EventManager.Trigger("HardMode");
+        Utils.EventManager.Trigger("DisableMenu");
     }
-    
+
     public void ToMainMenu()
     {
-        SceneManager.LoadScene("MenuScene");
+        Utils.EventManager.Trigger("EnableMenu");
     }
 }

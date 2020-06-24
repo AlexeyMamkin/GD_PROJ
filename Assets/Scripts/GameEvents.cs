@@ -7,18 +7,37 @@ public class GameEvents : MonoBehaviour
 {
     [SerializeField] private GameObject WinPanel;
 
+    private void OnEnable()
+    {
+        Utils.EventManager.StartListening("ClearField", DeactivatePanel);
+    }
+
+    private void OnDisable()
+    {
+        Utils.EventManager.StopListening("ClearField", DeactivatePanel);
+    }
+
     public void Win()
     {
         WinPanel.SetActive(true);
     }
 
+    public void DeactivatePanel()
+    {
+        WinPanel.SetActive(false);
+    }
+
     public void ToNextLevel()
     {
-        Debug.Log("--------------In development--------------");
+        Utils.EventManager.Trigger("LoadNextLevel");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        DeactivatePanel();
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Utils.EventManager.Trigger("LoadCurrentLevel");
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        DeactivatePanel();
     }
 }

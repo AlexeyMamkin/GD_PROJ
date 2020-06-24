@@ -16,12 +16,14 @@ public class CargoPanel : MonoBehaviour
     {
         Utils.EventManager<Cargo>.StartListening("RemoveCargo", RemoveCargo);
         Utils.EventManager<Cargo>.StartListening("AddPanel", AddCargo);
+        Utils.EventManager.StartListening("ClearField", ClearField);
     }
 
     private void OnDisable()
     {
         Utils.EventManager<Cargo>.StopListening("RemoveCargo", RemoveCargo);
         Utils.EventManager<Cargo>.StopListening("AddPanel", AddCargo);
+        Utils.EventManager.StopListening("ClearField", ClearField);
     }
 
     private void RemoveCargo(Cargo cargo)
@@ -103,7 +105,7 @@ public class CargoPanel : MonoBehaviour
 
         for (int i = 0; i < cargos.Count; i++)
         {
-            if (i + offset != unnecessaryNum)
+            if ((i + offset != unnecessaryNum) || (basicCargoWeight * leftLeverCount % rightLeverCount != 0))
             {
                 cargos[i].weight = i + offset;
                 cargos[i].UpdateText();
@@ -115,5 +117,15 @@ public class CargoPanel : MonoBehaviour
                 cargos[i].UpdateText();
             }
         }
+    }
+
+    private void ClearField()
+    {
+        for (int i = 0; i < cargos.Count; i++)
+        {
+            Destroy(cargos[i].gameObject);
+        }
+        cargos.Clear();
+        UpdatePanel();
     }
 }

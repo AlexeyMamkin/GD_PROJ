@@ -19,6 +19,7 @@ public class Lever : MonoBehaviour
         Utils.EventManager<Cargo>.StartListening("AddRightLever", AddRight);
         Utils.EventManager<Cargo>.StartListening("AddLeftLever", AddLeft);
         Utils.EventManager<Cargo>.StartListening("RemoveCargo", RemoveCargo);
+        Utils.EventManager.StartListening("ClearField", ClearField);
     }
 
     private void OnDisable()
@@ -26,6 +27,7 @@ public class Lever : MonoBehaviour
         Utils.EventManager<Cargo>.StopListening("AddRightLever", AddRight);
         Utils.EventManager<Cargo>.StopListening("AddLeftLever", AddLeft);
         Utils.EventManager<Cargo>.StopListening("RemoveCargo", RemoveCargo);
+        Utils.EventManager.StopListening("ClearField", ClearField);
     }
 
     private void Start()
@@ -70,7 +72,7 @@ public class Lever : MonoBehaviour
         Vector3 pos = m_leftCargosParent.position;
 
         float offset = -1f;
-        
+
         for (int i = 0; i < m_leftCargos.Count; i++)
         {
             m_leftCargos[i].transform.position = pos;
@@ -98,7 +100,24 @@ public class Lever : MonoBehaviour
         {
             m_rightWeight -= cargo.weight;
         }
-        
+
         UpdateLevers();
+    }
+
+    private void ClearField()
+    {
+        for (int i = 0; i < m_leftCargos.Count; i++)
+        {
+            Destroy(m_leftCargos[i].gameObject);
+        }
+        for (int i = 0; i < m_rightCargos.Count; i++)
+        {
+            Destroy(m_rightCargos[i].gameObject);
+        }
+        m_leftCargos.Clear();
+        m_rightCargos.Clear();
+        UpdateLevers();
+        m_leftWeight = 0;
+        m_rightWeight = 0;
     }
 }
