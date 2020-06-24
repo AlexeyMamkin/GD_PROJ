@@ -105,6 +105,18 @@ public class GameManager : MonoBehaviour
         m_stand.SetPositionFor(leftLeverCount, rightLeverCount);
         m_lever.SetBasicCargo(basicCargoWeight);
         m_cargoPanel.SetCargosFor(basicCargoWeight, leftLeverCount, rightLeverCount);
+
+        Utils.EventManager.Trigger("StartGame");
+    }
+
+    private void InitCurr()
+    {
+        SetSprite(_leftLeverCount + _rightLeverCount);
+        m_stand.SetPositionFor(_leftLeverCount, _rightLeverCount);
+        m_lever.SetBasicCargo(_basicCargoWeight);
+        m_cargoPanel.SetCargosFor(_basicCargoWeight, _leftLeverCount, _rightLeverCount);
+
+        Utils.EventManager.Trigger("StartGame");
     }
 
     private List<int> GetValuesFor(Mode mode)
@@ -134,10 +146,8 @@ public class GameManager : MonoBehaviour
 
         if (leftStrength == rightStrength)
         {
-            Camera.main.GetComponent<GameEvents>().Win();
-            Camera.main.GetComponent<Timer>().SetWin();
+            Utils.EventManager.Trigger("Win");
             Debug.Log(m_level + " is passed");
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!You win!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
     }
 
@@ -196,6 +206,7 @@ public class GameManager : MonoBehaviour
     private void RestartCurrentLevel()
     {
         Utils.EventManager.Trigger("ClearField");
+        InitCurr();
         Debug.Log("current level");
     }
 }

@@ -58,6 +58,7 @@ public class Lever : MonoBehaviour
         m_rightCargos.Add(cargo);
         m_rightWeight += cargo.weight;
         UpdateLevers();
+        Utils.EventManager<Vector2Int>.Trigger("CheckWeights", new Vector2Int(m_leftWeight, m_rightWeight));
     }
 
     private void AddLeft(Cargo cargo)
@@ -65,6 +66,7 @@ public class Lever : MonoBehaviour
         m_leftCargos.Add(cargo);
         m_leftWeight += cargo.weight;
         UpdateLevers();
+        Utils.EventManager<Vector2Int>.Trigger("CheckWeights", new Vector2Int(m_leftWeight, m_rightWeight));
     }
 
     private void UpdateLevers()
@@ -86,8 +88,6 @@ public class Lever : MonoBehaviour
             m_rightCargos[i].transform.position = pos;
             pos.y += offset;
         }
-
-        Utils.EventManager<Vector2Int>.Trigger("CheckWeights", new Vector2Int(m_leftWeight, m_rightWeight));
     }
 
     private void RemoveCargo(Cargo cargo)
@@ -102,6 +102,7 @@ public class Lever : MonoBehaviour
         }
 
         UpdateLevers();
+        Utils.EventManager<Vector2Int>.Trigger("CheckWeights", new Vector2Int(m_leftWeight, m_rightWeight));
     }
 
     private void ClearField()
