@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
         m_cargoPanel.SetCargosFor(basicCargoWeight, leftLeverCount, rightLeverCount);
 
         Utils.EventManager.Trigger("StartGame");
+        Utils.EventManager<int>.Trigger("ShowLevel", m_level);
     }
 
     private void InitCurr()
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
         m_cargoPanel.SetCargosFor(_basicCargoWeight, _leftLeverCount, _rightLeverCount);
 
         Utils.EventManager.Trigger("StartGame");
+        Utils.EventManager<int>.Trigger("ShowLevel", m_level);
     }
 
     private List<int> GetValuesFor(Mode mode)
@@ -185,12 +187,14 @@ public class GameManager : MonoBehaviour
 
     private void SetNormalMode()
     {
+        m_level = 1;
         m_mode = Mode.Normal;
         Init(m_mode);
     }
 
     private void SetHardMode()
     {
+        m_level = 1;
         m_mode = Mode.Hard;
         Init(m_mode);
     }
