@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
                 list.RemoveAt(i);
                 i = Random.Range(0, list.Count);
                 rightLeverCount = list[i];
-                basicCargoWeight = Random.Range(2, 5);
+                basicCargoWeight = Random.Range(1, 3);
             }
             else
             {
