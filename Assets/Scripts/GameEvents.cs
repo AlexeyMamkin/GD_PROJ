@@ -7,12 +7,16 @@ public class GameEvents : MonoBehaviour
 {
     [SerializeField] private GameObject WinPanel;
     [SerializeField] private GameObject LosePanel;
+    [SerializeField] private GameObject NormLevelsPassedPanel;
+    [SerializeField] private GameObject HardLevelsPassedPanel;
 
     private void OnEnable()
     {
         Utils.EventManager.StartListening("ClearField", DeactivatePanel);
         Utils.EventManager.StartListening("Win", Win);
         Utils.EventManager.StartListening("Lose", Lose);
+        Utils.EventManager.StartListening("NormLevelsPassed", NormLevelsPassed);
+        Utils.EventManager.StartListening("HardLevelsPassed", HardLevelsPassed);
     }
 
     private void OnDisable()
@@ -20,6 +24,8 @@ public class GameEvents : MonoBehaviour
         Utils.EventManager.StopListening("ClearField", DeactivatePanel);
         Utils.EventManager.StopListening("Win", Win);
         Utils.EventManager.StopListening("Lose", Lose);
+        Utils.EventManager.StopListening("NormLevelsPassed", NormLevelsPassed);
+        Utils.EventManager.StopListening("HardLevelsPassed", HardLevelsPassed);
     }
 
     public void Win()
@@ -30,11 +36,21 @@ public class GameEvents : MonoBehaviour
     {
         LosePanel.SetActive(true);
     }
+    public void NormLevelsPassed()
+    {
+        NormLevelsPassedPanel.SetActive(true);
+    }
+    public void HardLevelsPassed()
+    {
+        HardLevelsPassedPanel.SetActive(true);
+    }
 
     public void DeactivatePanel()
     {
         WinPanel.SetActive(false);
         LosePanel.SetActive(false);
+        NormLevelsPassedPanel.SetActive(false);
+        HardLevelsPassedPanel.SetActive(false);
     }
 
     public void ToNextLevel()

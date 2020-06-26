@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite _leverSprite7;
     [SerializeField] private Sprite _leverSprite8;
     [SerializeField] private Sprite _leverSprite9;
+
+    const int MAX_LEVEL = 5;
 
     private Lever m_lever;
     private Stand m_stand;
@@ -108,6 +110,7 @@ public class GameManager : MonoBehaviour
 
         Utils.EventManager.Trigger("StartGame");
         Utils.EventManager<int>.Trigger("ShowLevel", m_level);
+        Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
     }
 
     private void InitCurr()
@@ -119,6 +122,7 @@ public class GameManager : MonoBehaviour
 
         Utils.EventManager.Trigger("StartGame");
         Utils.EventManager<int>.Trigger("ShowLevel", m_level);
+        Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
     }
 
     private List<int> GetValuesFor(Mode mode)
@@ -148,8 +152,19 @@ public class GameManager : MonoBehaviour
 
         if (leftStrength == rightStrength)
         {
-            Utils.EventManager.Trigger("Win");
-            Debug.Log(m_level + " is passed");
+            if (m_level == MAX_LEVEL && m_mode == Mode.Normal)
+            {
+                Utils.EventManager.Trigger("NormLevelsPassed");
+            }
+            else if (m_level == MAX_LEVEL && m_mode == Mode.Hard)
+            {
+                Utils.EventManager.Trigger("HardLevelsPassed");
+            }
+            else
+            {
+                Utils.EventManager.Trigger("Win");
+                Debug.Log(m_level + " is passed");
+            }
         }
     }
 
