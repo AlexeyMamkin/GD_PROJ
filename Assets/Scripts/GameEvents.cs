@@ -16,7 +16,6 @@ public class GameEvents : MonoBehaviour
         Utils.EventManager.StartListening("Win", Win);
         Utils.EventManager.StartListening("Lose", Lose);
         Utils.EventManager.StartListening("NormLevelsPassed", NormLevelsPassed);
-        Utils.EventManager.StartListening("HardLevelsPassed", HardLevelsPassed);
     }
 
     private void OnDisable()
@@ -25,7 +24,6 @@ public class GameEvents : MonoBehaviour
         Utils.EventManager.StopListening("Win", Win);
         Utils.EventManager.StopListening("Lose", Lose);
         Utils.EventManager.StopListening("NormLevelsPassed", NormLevelsPassed);
-        Utils.EventManager.StopListening("HardLevelsPassed", HardLevelsPassed);
     }
 
     public void Win()
@@ -40,17 +38,12 @@ public class GameEvents : MonoBehaviour
     {
         NormLevelsPassedPanel.SetActive(true);
     }
-    public void HardLevelsPassed()
-    {
-        HardLevelsPassedPanel.SetActive(true);
-    }
 
     public void DeactivatePanel()
     {
         WinPanel.SetActive(false);
         LosePanel.SetActive(false);
         NormLevelsPassedPanel.SetActive(false);
-        HardLevelsPassedPanel.SetActive(false);
     }
 
     public void ToNextLevel()

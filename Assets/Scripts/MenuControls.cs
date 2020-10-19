@@ -24,6 +24,8 @@ public class MenuControls : MonoBehaviour
 
     public void ToMainMenu()
     {
+        SceneManager.LoadScene("GameScene");
+        Utils.EventManager.Trigger("ClearField");
         Utils.EventManager.Trigger("DisableInGameUI");
         Utils.EventManager.Trigger("EnableMenu");
     }

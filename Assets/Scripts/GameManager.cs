@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int _leftLeverCount;
-    [SerializeField] private int _rightLeverCount;
+    [SerializeField] public int _leftLeverCount;
+    [SerializeField] public int _rightLeverCount;
     [SerializeField] private int _basicCargoWeight;
     [SerializeField] private Sprite _leverSprite3;
     [SerializeField] private Sprite _leverSprite4;
@@ -16,20 +16,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite _leverSprite8;
     [SerializeField] private Sprite _leverSprite9;
 
-    const int MAX_LEVEL = 5;
+    const int MAX_LEVEL = 10;
 
     private Lever m_lever;
     private Stand m_stand;
     private CargoPanel m_cargoPanel;
-    private Mode m_mode = Mode.Normal;
+    //    private Mode m_mode = Mode.Normal;
     private int m_level = 0;
 
-
+    
     private void OnEnable()
     {
         Utils.EventManager<Vector2Int>.StartListening("CheckWeights", CheckWeights);
         Utils.EventManager.StartListening("NormalMode", SetNormalMode);
-        Utils.EventManager.StartListening("HardMode", SetHardMode);
         Utils.EventManager.StartListening("LoadNextLevel", LoadNextLevel);
         Utils.EventManager.StartListening("LoadCurrentLevel", RestartCurrentLevel);
     }
@@ -38,7 +37,6 @@ public class GameManager : MonoBehaviour
     {
         Utils.EventManager<Vector2Int>.StopListening("CheckWeights", CheckWeights);
         Utils.EventManager.StopListening("NormalMode", SetNormalMode);
-        Utils.EventManager.StopListening("HardMode", SetHardMode);
         Utils.EventManager.StopListening("LoadNextLevel", LoadNextLevel);
         Utils.EventManager.StopListening("LoadCurrentLevel", RestartCurrentLevel);
     }
@@ -67,7 +65,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Init(Mode mode)
+    private void Init()
     {
         int leftLeverCount;
         int rightLeverCount;
@@ -75,26 +73,29 @@ public class GameManager : MonoBehaviour
 
         do
         {
-            List<int> list = GetValuesFor(mode);
-            int i;
-            if (mode == Mode.Hard)
+            List<int> list;
+            if (m_level == 1 || m_level == 2 || m_level == 3)
             {
-                i = Random.Range(0, list.Count);
-                leftLeverCount = list[i];
-                list.RemoveAt(i);
-                i = Random.Range(0, list.Count);
-                rightLeverCount = list[i];
-                basicCargoWeight = Random.Range(1, 3);
+                list = GetValuesFor(1);
+            }
+            else if (m_level == 4 || m_level == 5 || m_level == 6)
+            {
+                list = GetValuesFor(2);
             }
             else
             {
-                i = Random.Range(0, list.Count);
-                leftLeverCount = list[i];
-                list.RemoveAt(i);
-                i = Random.Range(0, list.Count);
-                rightLeverCount = list[i];
-                basicCargoWeight = Random.Range(1, 3);
+                list = GetValuesFor(3);
             }
+
+            //List<int> list = GetValuesFor(mode);
+            int i;
+
+            i = Random.Range(0, list.Count);
+            leftLeverCount = list[i];
+            list.RemoveAt(i);
+            i = Random.Range(0, list.Count);
+            rightLeverCount = list[i];
+            basicCargoWeight = Random.Range(1, 3);
         }
         while (leftLeverCount == rightLeverCount);
 
@@ -110,7 +111,7 @@ public class GameManager : MonoBehaviour
 
         Utils.EventManager.Trigger("StartGame");
         Utils.EventManager<int>.Trigger("ShowLevel", m_level);
-        Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
+        //Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
     }
 
     private void InitCurr()
@@ -122,23 +123,30 @@ public class GameManager : MonoBehaviour
 
         Utils.EventManager.Trigger("StartGame");
         Utils.EventManager<int>.Trigger("ShowLevel", m_level);
-        Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
+        //Utils.EventManager<Mode>.Trigger("ShowMode", m_mode);
     }
 
-    private List<int> GetValuesFor(Mode mode)
+    private List<int> GetValuesFor(int mode)
     {
         List<int> list = new List<int>();
-        if (mode == Mode.Hard)
-        {
-            list.Add(3);
-            list.Add(4);
-            list.Add(5);
-        }
-        else
+        if (mode == 1)
         {
             list.Add(1);
             list.Add(2);
             list.Add(3);
+        }
+        else if (mode == 2)
+        {
+            list.Add(3);
+            list.Add(4);
+            list.Add(5);
+            //list.Add(3);
+        }
+        else
+        {
+            list.Add(5);
+            list.Add(6);
+            list.Add(7);
         }
         return list;
     }
@@ -152,14 +160,12 @@ public class GameManager : MonoBehaviour
 
         if (leftStrength == rightStrength)
         {
-            if (m_level == MAX_LEVEL && m_mode == Mode.Normal)
+            
+            if (m_level == MAX_LEVEL)
             {
                 Utils.EventManager.Trigger("NormLevelsPassed");
             }
-            else if (m_level == MAX_LEVEL && m_mode == Mode.Hard)
-            {
-                Utils.EventManager.Trigger("HardLevelsPassed");
-            }
+
             else
             {
                 Utils.EventManager.Trigger("Win");
@@ -202,23 +208,17 @@ public class GameManager : MonoBehaviour
 
     private void SetNormalMode()
     {
+        Utils.EventManager.Trigger("ClearField");
         m_level = 1;
-        m_mode = Mode.Normal;
-        Init(m_mode);
+        Init();
     }
 
-    private void SetHardMode()
-    {
-        m_level = 1;
-        m_mode = Mode.Hard;
-        Init(m_mode);
-    }
 
     private void LoadNextLevel()
     {
         Utils.EventManager.Trigger("ClearField");
         m_level++;
-        Init(m_mode);
+        Init();
         Debug.Log("next level");
     }
 
